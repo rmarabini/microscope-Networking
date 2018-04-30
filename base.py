@@ -1,23 +1,27 @@
+#!/volume1/@appstore/python/bin/python
 import argparse
 import os, sys
 import paramiko
 import subprocess
 import time
 from interruptingcow import timeout
+import glob
+from argparse import RawTextHelpFormatter
 
-def _usage(usage):
+DATADIR='/volume1/homes/scipionuser/OffloadData/'
+RSYNC='/usr/bin/rsync'
+def _usage(description, epilog):
     """ Print usage information"""
-    projectDir = '/var/services/homes/scipionuser/Projects'
-    for root, dirs, files in os.walk(projectDir):
-        for dir in dirs:
-            print(dir)
+    projectDir = '/var/services/homes/scipionuser/Projects/20*'
+    for name in glob.glob(projectDir):
+        print("  ", os.path.basename(name))
 
-    parser = argparse.ArgumentParser(usage)
-    parser.add_argument("source", help="source directory")
+    parser = argparse.ArgumentParser(description=description, formatter_class=RawTextHelpFormatter, epilog=epilog)
+    parser.add_argument("projname", help="source directory")
     parser.add_argument("target", help="target directory")
     parser.add_argument("--timeout", help="timeout (default=432000, 5 days)", default=432000)
     args = parser.parse_args()
-    return args.source, args.target, args.timeout
+    return args.projname, args.target, args.timeout
 
 def _remote(target):
     """ return tru is target has the symbol @ (remote rsync)"""
@@ -27,8 +31,11 @@ def _remote(target):
     else:
         return None, None, target
 
-def _createDirectory(dir, username=None, host=None):
+
+def _createDirectory(projectName, targetDir, username=None, host=None):
     """ Create directory either local or remote"""
+    dir = targetDir # os.path.join(targetDir, projectName)
+
     if username is None: #local rsync
         if not os.path.exists(dir):
             os.makedirs(dir)
@@ -40,11 +47,12 @@ def _createDirectory(dir, username=None, host=None):
         ssh.exec_command('mkdir -p ' + dir)
         ssh.close
 
-def _copy_files(source, targetDir, username, host, _timeout):
+def _copy_files(projectName, targetDir, username, host, _timeout):
     """loop that copies files"""
-    args = ["/usr/bin/rsync"]
+    args = [RSYNC]
     args.append("-va")
     args.append("--progress")
+    source = os.path.join(DATADIR, projectName)
     args.append(source)
     if username is not None:
         args.append("%s@%s:%s" % (username, host, targetDir))
