@@ -14,7 +14,6 @@ if __name__ == '__main__':
 
     projectName, target, timeout = _usage(description, epilog)
     copyfile = CopyFiles(projectName, target, timeout)
-    copyfile._createDirectory()
     exitcode =copyfile._copy_files([EPUDATADIR, PROJECTDIR], timeout)
 
     if exitcode==0:

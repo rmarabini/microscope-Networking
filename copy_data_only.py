@@ -14,7 +14,6 @@ if __name__ == '__main__':
               '2018_04_16_belen_t7)'
     projectName, target, timeout = _usage(description, epilog)
     copyfile = CopyFiles(projectName, target, timeout)
-    copyfile._createDirectory()
     exitcode =copyfile._copy_files([EPUDATADIR], timeout)
 
     if exitcode==0:

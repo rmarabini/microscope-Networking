@@ -114,17 +114,16 @@ class CopyFiles():
             self.localTarget = True
         self.remoteCommand = RemoteCommands(2) # retry comamnd 2 times
 
-    def _createDirectory(self):
+    def _createDirectory(self, typeData):
         """ Create directory either local or remote
             data will be copied to  this directory
         """
-        dir = os.path.join(self.targetDir, self.projectName)
+        dir = os.path.join(self.targetDir, self.projectName, typeData)
 
         if self.localTarget: #save to local usb disk
             if not os.path.exists(dir):
                 os.makedirs(dir)
         else: # rmote directory creation
-            print "ssssssssssssssssssssssssss"
             self.remoteCommand.run_cmd(self.targetHost, ['mkdir -p %s' % dir])
 
     def _copy_files(self, typeDataList, _timeout):
@@ -132,6 +131,7 @@ class CopyFiles():
 
         if  EPUDATADIR in typeDataList:
             typeData = EPUDATADIR
+            self._createDirectory(typeData)
             args = [RSYNC]
             args.append("-va")
             args.append("--progress")
@@ -144,6 +144,7 @@ class CopyFiles():
                 args.append("%s@%s:%s" % (self.targetUserName, self.targetHost, self.targetDir))
 
         if PROJECTDIR in typeDataList:
+            self._createDirectory(typeData)
             typeData = PROJECTDIR
             cmd = RSYNC + \
                   " -va" + \
