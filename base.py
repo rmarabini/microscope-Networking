@@ -143,8 +143,8 @@ class CopyFiles():
                 cmdEPU += "%s@%s:%s" % (self.targetUserName, self.targetHost, self.targetDir)
 
         if PROJECTDIR in typeDataList:
-            self._createDirectory(typeData)
             typeData = PROJECTDIR
+            self._createDirectory(typeData)
             cmdProj = RSYNC + \
                   " -va" + \
                   " --progress" + \
