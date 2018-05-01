@@ -156,6 +156,7 @@ class CopyFiles():
                 cmdProj += "%s@%s:%s" % (self.targetUserName, self.targetHost, targetDir)
 
         try:
+            print "_timeout", _timeout, type(_timeout)
             with timeout(_timeout, exception=RuntimeError): # _timeout seconds
                 while True:
                     if EPUDATADIR in typeDataList:
