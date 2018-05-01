@@ -132,37 +132,36 @@ class CopyFiles():
         if  EPUDATADIR in typeDataList:
             typeData = EPUDATADIR
             self._createDirectory(typeData)
-            args = [RSYNC]
-            args.append("-va")
-            args.append("--progress")
-            source = os.path.join(DATADIR, typeData, self.projectName + "/")
-            args.append(source)
+            cmdEPU = RSYNC + \
+                  " -va" + \
+                  " --progress " + \
+                  os.path.join(DATADIR, typeData, self.projectName + "/")
             targetDir = os.path.join(self.targetDir, self.projectName, typeData)
             if self.localTarget:
-                args.append(targetDir)
+                cmdEPU += targetDir
             else:
-                args.append("%s@%s:%s" % (self.targetUserName, self.targetHost, self.targetDir))
+                cmdEPU += "%s@%s:%s" % (self.targetUserName, self.targetHost, self.targetDir)
 
         if PROJECTDIR in typeDataList:
             self._createDirectory(typeData)
             typeData = PROJECTDIR
-            cmd = RSYNC + \
+            cmdProj = RSYNC + \
                   " -va" + \
                   " --progress" + \
                   " " + SCIPIONDATADIR + "/projects/" + self.projectName + "/ "
             targetDir = os.path.join(self.targetDir, self.projectName, typeData)
             if self.localTarget:
-                cmd += "%s@%s:%s" % (SCIPIONUSER, RUSKAHOST, self.targetDir)
+                cmdProj += "%s@%s:%s" % (SCIPIONUSER, RUSKAHOST, self.targetDir)
             else:
-                cmd += "%s@%s:%s" % (self.targetUserName, self.targetHost, self.targetDir)
+                cmdProj += "%s@%s:%s" % (self.targetUserName, self.targetHost, self.targetDir)
 
         try:
             with timeout(_timeout, exception=RuntimeError): # _timeout seconds
                 while True:
                     if EPUDATADIR in typeDataList:
-                        rsyncproc = subprocess.Popen(args)
+                        os.system(cmdEPU)
                     if PROJECTDIR in typeDataList:
-                        self.remoteCommand.run_cmd(SCIPIONHOST, [cmd])
+                        self.remoteCommand.run_cmd(SCIPIONHOST, [cmdProj])
                     print "sleeping";sys.stdout.flush()
                     time.sleep(900)
                     print "weaking up";sys.stdout.flush()
