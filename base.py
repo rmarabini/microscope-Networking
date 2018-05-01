@@ -58,6 +58,7 @@ class RemoteCommands:
             try:
                 ssh = paramiko.SSHClient()
                 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+                print "connect to", host_name
                 ssh.connect(host_name)
                 break
             except paramiko.AuthenticationException:
@@ -89,7 +90,7 @@ class RemoteCommands:
                         tmp = stdout.channel.recv(1024)
                         output = tmp.decode()
                         print output
-
+        print "DONEDONE"
         # Close SSH connection
         ssh.close()
         return
