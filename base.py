@@ -44,7 +44,7 @@ def _usage(description, epilog):
                         default=5, type=float)
     args = parser.parse_args()
 
-    return args.projname, args.target, args.timeout * 24 * 60 * 60 # convert days to seconds
+    return args.projname, args.target, int(args.timeout * 24 * 60 * 60) # convert days to seconds
 
 class RemoteCommands:
     "class to execute a multiple commands in a remote host"
@@ -156,7 +156,6 @@ class CopyFiles():
                 cmdProj += "%s@%s:%s" % (self.targetUserName, self.targetHost, targetDir)
 
         try:
-            print "_timeout", int(_timeout), type(int(_timeout))
             with timeout(_timeout, exception=RuntimeError): # _timeout seconds
                 while True:
                     if EPUDATADIR in typeDataList:
