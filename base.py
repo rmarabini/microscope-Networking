@@ -90,7 +90,6 @@ class RemoteCommands:
                         tmp = stdout.channel.recv(1024)
                         output = tmp.decode()
                         print output
-        print "DONEDONE"
         # Close SSH connection
         ssh.close()
         return
@@ -152,9 +151,9 @@ class CopyFiles():
                   " " + SCIPIONDATADIR + "/projects/" + self.projectName + "/ "
             targetDir = os.path.join(self.targetDir, self.projectName, typeData)
             if self.localTarget:
-                cmdProj += "%s@%s:%s" % (SCIPIONUSER, RUSKAHOST, self.targetDir)
+                cmdProj += "%s@%s:%s" % (SCIPIONUSER, RUSKAHOST, targetDir)
             else:
-                cmdProj += "%s@%s:%s" % (self.targetUserName, self.targetHost, self.targetDir)
+                cmdProj += "%s@%s:%s" % (self.targetUserName, self.targetHost, targetDir)
 
         try:
             with timeout(_timeout, exception=RuntimeError): # _timeout seconds
