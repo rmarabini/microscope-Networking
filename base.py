@@ -11,8 +11,7 @@ from argparse import RawTextHelpFormatter
 DATADIR= '/volume1/homes/scipionuser/'
 EPUDATADIR= 'OffloadData/'
 PROJECTDIR='Projects/'
-RSYNCDATA='/usr/bin/rsync'
-RSYNCPROJECT='/usr/bin/rsync scipionuser@scipionbox:ScipionUserData'
+RSYNC='/usr/bin/rsync'
 
 def _usage(description, epilog):
     """ Print usage information and process command line
