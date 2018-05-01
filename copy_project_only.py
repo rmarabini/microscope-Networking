@@ -1,5 +1,5 @@
 #!/volume1/@appstore/python/bin/python
-from base import _copy_files, _createDirectory, _remote, _usage, EPUDATADIR, PROJECTDIR
+from base import CopyFiles, _usage, EPUDATADIR, PROJECTDIR
 import sys
 
 if __name__ == '__main__':
@@ -13,14 +13,9 @@ if __name__ == '__main__':
     epilog += '\nUMOUNT (as administrator): sudo umount /volumeUSB2/usbshare' \
               '/2018_04_16_belen_t7)'
     projectName, target, timeout = _usage(description, epilog)
-    username, host, targetDir = _remote(target)
-    _createDirectory(projectName, targetDir, username, host)
-    exitcode = _copy_files(projectName,
-                           [PROJECTDIR],  # data type to be transfered
-                           targetDir,
-                           username,
-                           host,
-                           timeout)
+    copyfile = CopyFiles(projectName, target, timeout)
+    copyfile._createDirectory()
+    exitcode =copyfile._copy_files([PROJECTDIR], timeout)
 
     if exitcode==0:
         pass
@@ -29,3 +24,4 @@ if __name__ == '__main__':
         sys.exit(1)
 
     print ("Done")
+
