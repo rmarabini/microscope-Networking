@@ -14,6 +14,7 @@ EPUDATADIR= 'OffloadData/'
 PROJECTDIR='Projects/'
 RSYNC='/usr/bin/rsync'
 SCIPIONHOST = 'scipionbox'
+RUSKAHOST = 'ruska'
 SCIPIONUSER = 'scipionuser'
 SCIPIONDATADIR = '/home/%s/ScipionUserData' % SCIPIONUSER
 
@@ -150,7 +151,7 @@ class CopyFiles():
                   " " + SCIPIONDATADIR + self.projectName + "/ "
             targetDir = os.path.join(self.targetDir, self.projectName, typeData)
             if self.localTarget:
-                cmd += targetDir
+                cmd += "%s@%s:%s" % (SCIPIONUSER, RUSKAHOST, self.targetDir)
             else:
                 cmd += "%s@%s:%s" % (self.targetUserName, self.targetHost, self.targetDir)
 
