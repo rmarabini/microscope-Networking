@@ -43,7 +43,7 @@ def _usage(description, epilog):
     parser.add_argument("--timeout", help="timeout (default=5, unit=days)",
                         default=5., type=float)
     args = parser.parse_args()
-
+    print "PARSING", args.timeout, args.timeout * 24 * 60 * 60, int(args.timeout * 24 * 60 * 60)
     return args.projname, args.target, int(args.timeout * 24 * 60 * 60) # convert days to seconds
 
 class RemoteCommands:
