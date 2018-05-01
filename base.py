@@ -11,7 +11,8 @@ from argparse import RawTextHelpFormatter
 DATADIR= '/volume1/homes/scipionuser/'
 EPUDATADIR= 'OffloadData/'
 PROJECTDIR='Projects/'
-RSYNC='/usr/bin/rsync'
+RSYNCDATA='/usr/bin/rsync'
+RSYNCPROJECT='/usr/bin/rsync scipionuser@scipionbox:ScipionUserData'
 
 def _usage(description, epilog):
     """ Print usage information and process command line
@@ -50,22 +51,23 @@ def _remote(target):
 
 
 
-def _createDirectory(projectName, targetDir, username=None, host=None):
+def _createDirectory(projectName, targetDirList, username=None, host=None):
     """ Create directory either local or remote
         data will be copied to  this directory
     """
-    dir = os.path.join(targetDir, projectName)
+    for targetDir in targetDirList:
+        dir = os.path.join(targetDir, projectName)
 
-    if username is None: #local rsync
-        if not os.path.exists(dir):
-            os.makedirs(dir)
-    else: # rmote directory creation
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # do not halt is host
-                                                                  # is not in known_hosts file
-        ssh.connect(host, 22, username, None)
-        ssh.exec_command('mkdir -p ' + dir)
-        ssh.close
+        if username is None: #local rsync
+            if not os.path.exists(dir):
+                os.makedirs(dir)
+        else: # rmote directory creation
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # do not halt is host
+                                                                      # is not in known_hosts file
+            ssh.connect(host, 22, username, None)
+            ssh.exec_command('mkdir -p ' + dir)
+            ssh.close
 """
 copy_files typeData = list
 for data in list
@@ -107,3 +109,6 @@ def _copy_files(projectName, typeDataList, targetDir, username, host, _timeout):
 
     exitcode = rsyncproc.wait()
     return exitcode
+
+
+#rsync: mkdir "/volumeUSB1/usbshare/2018_04_16_ana_t7/OffloadData/2018_04_16_ana_t7/Projects" failed: No such file or directory (2)
