@@ -135,7 +135,7 @@ class CopyFiles():
             cmdEPU = RSYNC + \
                   " -va" + \
                   " --progress " + \
-                  os.path.join(DATADIR, typeData, self.projectName + "/")
+                  os.path.join(DATADIR, typeData, self.projectName + "/ ")
             targetDir = os.path.join(self.targetDir, self.projectName, typeData)
             if self.localTarget:
                 cmdEPU += targetDir
@@ -159,8 +159,10 @@ class CopyFiles():
             with timeout(_timeout, exception=RuntimeError): # _timeout seconds
                 while True:
                     if EPUDATADIR in typeDataList:
+                        print cmdEPU
                         os.system(cmdEPU)
                     if PROJECTDIR in typeDataList:
+                        print cmdProj
                         self.remoteCommand.run_cmd(SCIPIONHOST, [cmdProj])
                     print "sleeping";sys.stdout.flush()
                     time.sleep(900)
