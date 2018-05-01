@@ -41,7 +41,7 @@ def _usage(description, epilog):
     parser.add_argument("projname", help="source directory")
     parser.add_argument("target", help="target directory")
     parser.add_argument("--timeout", help="timeout (default=5, unit=days)",
-                        default=5, type=float)
+                        default=5., type=float)
     args = parser.parse_args()
 
     return args.projname, args.target, int(args.timeout * 24 * 60 * 60) # convert days to seconds
@@ -156,6 +156,7 @@ class CopyFiles():
                 cmdProj += "%s@%s:%s" % (self.targetUserName, self.targetHost, targetDir)
 
         try:
+            print "_timeout", int(_timeout), type(int(_timeout))
             with timeout(_timeout, exception=RuntimeError): # _timeout seconds
                 while True:
                     if EPUDATADIR in typeDataList:
