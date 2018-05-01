@@ -24,6 +24,16 @@ def _usage(description, epilog):
                  target directory
                  timeout (stop) seconds
     """
+    # Print directory information
+    print "PROJECT NAMES------------------------------"
+    projectDir = '/var/services/homes/scipionuser/Projects/20*'
+    for name in glob.glob(projectDir):
+        print "  ", os.path.basename(name)
+    print "USB DISK AVAILABLES------------------------"
+    usbDir = '/volumeUSB*/usbshare'
+    for name in glob.glob(usbDir):
+        print "  ", name
+
     parser = argparse.ArgumentParser(description=description,
                                      formatter_class=RawTextHelpFormatter,
                                      epilog=epilog)
@@ -32,16 +42,6 @@ def _usage(description, epilog):
     parser.add_argument("--timeout", help="timeout (default=5, unit=days)",
                         default=5)
     args = parser.parse_args()
-    # if no argument or a single one print directory information
-    if len(args) < 2:
-        print "PROJECT NAMES------------------------------"
-        projectDir = '/var/services/homes/scipionuser/Projects/20*'
-        for name in glob.glob(projectDir):
-            print "  ", os.path.basename(name)
-        print "USB DISK AVAILABLES------------------------"
-        usbDir = '/volumeUSB*/usbshare'
-        for name in glob.glob(usbDir):
-            print "  ", name
 
     return args.projname, args.target, args.timeout * 24 * 60 * 60 # convert days to seconds
 
