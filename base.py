@@ -50,7 +50,7 @@ class RemoteCommands:
     def __init__(self, retry_time=0):
         self.retry_time = retry_time
 
-    def run_cmd(self, host_name, cmd_list):
+    def run_cmd(self, username, host_name, cmd_list):
         i = 0
         while True:
             print("Trying to connect to %s (%i/%i)" % (host_name, i, self.retry_time))
@@ -58,7 +58,7 @@ class RemoteCommands:
                 ssh = paramiko.SSHClient()
                 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
                 print "connect to", host_name
-                ssh.connect(host_name)
+                ssh.connect(host_name, username=username)
                 break
             except paramiko.AuthenticationException:
                 print("Authentication failed when connecting to %s" % host_name)
@@ -123,7 +123,7 @@ class CopyFiles():
             if not os.path.exists(dir):
                 os.makedirs(dir)
         else: # rmote directory creation
-            self.remoteCommand.run_cmd(self.targetHost, ['mkdir -p %s' % dir])
+            self.remoteCommand.run_cmd(self.targetUserName, self.targetHost, ['mkdir -p %s' % dir])
 
     def _copy_files(self, typeDataList, _timeout):
         """loop that copies files"""
