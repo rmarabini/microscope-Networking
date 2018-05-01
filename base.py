@@ -26,7 +26,7 @@ def _usage(description, epilog):
     print "USB DISK AVAILABLES------------------------"
     projectDir = '/volumeUSB*/usbshare'
     for name in glob.glob(projectDir):
-        print "  ", os.path.basename(name)
+        print "  ", name
 
     parser = argparse.ArgumentParser(description=description,
                                      formatter_class=RawTextHelpFormatter,
