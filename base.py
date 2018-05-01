@@ -123,6 +123,7 @@ class CopyFiles():
             if not os.path.exists(dir):
                 os.makedirs(dir)
         else: # rmote directory creation
+            print "ssssssssssssssssssssssssss"
             self.remoteCommand.run_cmd(self.targetHost, ['mkdir -p %s' % dir])
 
     def _copy_files(self, typeDataList, _timeout):
@@ -159,7 +160,7 @@ class CopyFiles():
                     if EPUDATADIR in typeDataList:
                         rsyncproc = subprocess.Popen(args)
                     if PROJECTDIR in typeDataList:
-                        self.remoteCommand.run_cmd(self.targetHost, [cmd])
+                        self.remoteCommand.run_cmd(SCIPIONHOST, [cmd])
                     print "sleeping";sys.stdout.flush()
                     time.sleep(900)
                     print "weaking up";sys.stdout.flush()
