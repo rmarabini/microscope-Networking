@@ -10,8 +10,7 @@ if __name__ == '__main__':
     epilog += '\nExample: %s 2018_04_16_belen_t7 /volumeUSB2/usbshare/. ' \
               '--timeout 1' % __file__
     epilog += '\n  where 1 is run for 1 day (5 days is the default)'
-    epilog += '\nUMOUNT (as administrator): sudo umount /volumeUSB2/usbshare/' \
-              '2018_04_16_belen_t7)'
+    epilog += '\nUMOUNT (as administrator): sudo umount /volumeUSB2/usbshare/'
     projectName, target, timeout = _usage(description, epilog)
     username, host, targetDir = _remote(target)
     _createDirectory(projectName, targetDir, username, host)
