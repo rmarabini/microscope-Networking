@@ -148,7 +148,7 @@ class CopyFiles():
             cmd = RSYNC + \
                   " -va" + \
                   " --progress" + \
-                  " " + SCIPIONDATADIR + self.projectName + "/ "
+                  " " + SCIPIONDATADIR + "/ " + self.projectName + "/ "
             targetDir = os.path.join(self.targetDir, self.projectName, typeData)
             if self.localTarget:
                 cmd += "%s@%s:%s" % (SCIPIONUSER, RUSKAHOST, self.targetDir)
