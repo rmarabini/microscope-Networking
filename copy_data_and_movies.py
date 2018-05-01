@@ -3,7 +3,7 @@ from base import _copy_files, _createDirectory, _remote, _usage, EPUDATADIR, PRO
 import sys
 
 if __name__ == '__main__':
-    description = 'Copy Data (no project) files'
+    description = 'Copy Data AND Project  files'
     epilog = 'Example: %s 2018_04_16_belen_t7 /volumeUSB2/usbshare/.' % \
              __file__
     epilog += '\nExample: %s 2018_project_blas jmv@hilbert:.' % __file__
