@@ -43,7 +43,6 @@ def _usage(description, epilog):
     parser.add_argument("--timeout", help="timeout (default=5, unit=days)",
                         default=5., type=float)
     args = parser.parse_args()
-    print "PARSING", args.timeout, args.timeout * 24 * 60 * 60, int(args.timeout * 24 * 60 * 60)
     return args.projname, args.target, int(args.timeout * 24 * 60 * 60) # convert days to seconds
 
 class RemoteCommands:
@@ -147,6 +146,18 @@ class CopyFiles():
             self._createDirectory(typeData)
             cmdProj = RSYNC + \
                   " -va" + \
+                  " --progress " + \
+                  os.path.join(DATADIR, typeData, self.projectName + "/ ")
+            targetDir = os.path.join(self.targetDir, self.projectName, typeData)
+            if self.localTarget:
+                cmdProj += targetDir
+            else:
+                cmdProj += "%s@%s:%s" % (self.targetUserName, self.targetHost, self.targetDir)
+            """
+            typeData = PROJECTDIR
+            self._createDirectory(typeData)
+            cmdProj = RSYNC + \
+                  " -va" + \
                   " --progress" + \
                   " " + SCIPIONDATADIR + "/projects/" + self.projectName + "/ "
             targetDir = os.path.join(self.targetDir, self.projectName, typeData)
@@ -154,9 +165,9 @@ class CopyFiles():
                 cmdProj += "%s@%s:%s" % (SCIPIONUSER, RUSKAHOST, targetDir)
             else:
                 cmdProj += "%s@%s:%s" % (self.targetUserName, self.targetHost, targetDir)
+            """
 
         try:
-            print "_timeout", int(_timeout), type(int(_timeout))
             with timeout(_timeout, exception=RuntimeError): # _timeout seconds
                 while True:
                     if EPUDATADIR in typeDataList:
@@ -164,7 +175,8 @@ class CopyFiles():
                         os.system(cmdEPU)
                     if PROJECTDIR in typeDataList:
                         print cmdProj
-                        self.remoteCommand.run_cmd(SCIPIONHOST, [cmdProj])
+                        os.system(cmdProj)
+                        #self.remoteCommand.run_cmd(SCIPIONHOST, [cmdProj])
                     print "sleeping";sys.stdout.flush()
                     time.sleep(900)
                     print "weaking up";sys.stdout.flush()
@@ -172,5 +184,3 @@ class CopyFiles():
         except RuntimeError:
             print "Aborting, copy didn't finish within %d seconds" % _timeout
 
-        exitcode = rsyncproc.wait()
-        return exitcode
