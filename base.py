@@ -22,11 +22,11 @@ def _usage(description, epilog):
     print "PROJECT NAMES------------------------------"
     projectDir = '/var/services/homes/scipionuser/Projects/20*'
     for name in glob.glob(projectDir):
-        print("  ", os.path.basename(name))
-    print "USB DISK AVAILABLES"
+        print "  ", os.path.basename(name)
+    print "USB DISK AVAILABLES------------------------"
     projectDir = '/volumeUSB*/usbshare'
     for name in glob.glob(projectDir):
-        print("  ", os.path.basename(name))
+        print "  ", os.path.basename(name)
 
     parser = argparse.ArgumentParser(description=description,
                                      formatter_class=RawTextHelpFormatter,
