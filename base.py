@@ -51,23 +51,22 @@ def _remote(target):
 
 
 
-def _createDirectory(projectName, targetDirList, username=None, host=None):
+def _createDirectory(projectName, targetDir, username=None, host=None):
     """ Create directory either local or remote
         data will be copied to  this directory
     """
-    for targetDir in targetDirList:
-        dir = os.path.join(targetDir, projectName)
+    dir = os.path.join(targetDir, projectName)
 
-        if username is None: #local rsync
-            if not os.path.exists(dir):
-                os.makedirs(dir)
-        else: # rmote directory creation
-            ssh = paramiko.SSHClient()
-            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # do not halt is host
-                                                                      # is not in known_hosts file
-            ssh.connect(host, 22, username, None)
-            ssh.exec_command('mkdir -p ' + dir)
-            ssh.close
+    if username is None: #local rsync
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+    else: # rmote directory creation
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # do not halt is host
+                                                                  # is not in known_hosts file
+        ssh.connect(host, 22, username, None)
+        ssh.exec_command('mkdir -p ' + dir)
+        ssh.close
 """
 copy_files typeData = list
 for data in list
