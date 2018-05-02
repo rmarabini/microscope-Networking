@@ -52,7 +52,7 @@ if __name__ == '__main__':
     remountCommand = "mount -o remount,ro,bind"
     source = os.path.join(DATADIR, EPUDATADIR, projectName)
     target = os.path.join(chrootedProjectPath, EPUDATADIR[:-1])
-    os.system("%s %s %s" %(mountCommand, source, target))
+    os.system("%s %s %s" %(mountCommand, sourcel, target))
     os.system("%s %s %s" %(remountCommand, source, target)) # remount read only
     #
     source = os.path.join(DATADIR, PROJECTDIR, projectName)
