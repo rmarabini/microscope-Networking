@@ -15,7 +15,7 @@ def _usage(description, epilog):
                  timeout (stop) seconds
     """
     # Print directory information
-    print "PROJECT NAMES------------------------------"
+    print "PROJECT NAMES-----------------------------"
     projectDir = '/var/services/homes/scipionuser/Projects/20*'
     for name in glob.glob(projectDir):
         print "  ", os.path.basename(name)
