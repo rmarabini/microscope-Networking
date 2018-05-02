@@ -123,7 +123,9 @@ class CopyFiles():
             if not os.path.exists(dir):
                 os.makedirs(dir)
         else: # rmote directory creation
-            self.remoteCommand.run_cmd(self.targetUserName, self.targetHost, ['mkdir -p %s' % dir])
+            self.remoteCommand.run_cmd(self.targetUserName,
+                                       self.targetHost,
+                                       ['mkdir -p %s' % dir])
 
     def _copy_files(self, typeDataList, _timeout):
         """loop that copies files"""
@@ -139,7 +141,7 @@ class CopyFiles():
             if self.localTarget:
                 cmdEPU += targetDir
             else:
-                cmdEPU += "%s@%s:%s" % (self.targetUserName, self.targetHost, self.targetDir)
+                cmdEPU += "%s@%s:%s" % (self.targetUserName, self.targetHost, targetDir)
 
         if PROJECTDIR in typeDataList:
             typeData = PROJECTDIR
@@ -152,7 +154,7 @@ class CopyFiles():
             if self.localTarget:
                 cmdProj += targetDir
             else:
-                cmdProj += "%s@%s:%s" % (self.targetUserName, self.targetHost, self.targetDir)
+                cmdProj += "%s@%s:%s" % (self.targetUserName, self.targetHost, targetDir)
             """
             typeData = PROJECTDIR
             self._createDirectory(typeData)
