@@ -105,6 +105,7 @@ if __name__ == '__main__':
     chrootAuthotizedKeyFile = os.path.join(REMOTESCIPIONUSERPATH, ".ssh/authorized_keys")
     with open(pubKeyFileName, 'r') as authorizedFile:
         scipionUserKeys = authorizedFile.read()
+    print "scipionUserKeys", scipionUserKeys
     oldKeys = AuthorizedKeysFile(scipionUserKeys)
 
     for key in oldKeys.keys:
