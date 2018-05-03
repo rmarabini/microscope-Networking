@@ -146,8 +146,3 @@ if __name__ == '__main__':
     print "IMPORTANT: remote user should execute command: "
     print '    rsync --progress -av -e "ssh -p 2222" ' \
           'scipionuser@ruska.cnb.csic.es:. %s' % projectName
-
-"""
-rsync --progress -av -e "ssh -p 2222" scipionuser@ruska.cnb.csic.es:. myname
-command="/usr/local/bin/rrsync -ro /home/scipionuser/2018_04_16_ana_t7",no-agent-forwarding,no-port-forwarding,no-pty,no-user-rc,no-X11-forwarding ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC6Lme+PgvG7lHjVuqkeCFnixG8JPp73t/0pU/ckuMiD+ZlNKVgN7ES0wzbu+ZAuiQ9NVpvwycYfeg7Ab6rh2uryUUyFyh1UJgklF85d2baGGOyQNTxHamRUvBl2sBtCwNrBHgu9YV/2o+smM9ZC5XoixSjHlKaF4vatS/GfzM7z7ss249jvd2iOhKVfDQTKgHigBlZs96O7c1kIqrd7Ol9b+B2y/Avvt/eL7X63aSy2hjJ/v0W87/9/4EqC8nGzy1pN1mhcfHhuoVhrtMcayun87xiV1IJr5zVCosYZYPNCGPmyeUXt17XAOvaDGDBU0jROBn13SKUlbC4YIK8S5q9 roberto@flemming
-"""
