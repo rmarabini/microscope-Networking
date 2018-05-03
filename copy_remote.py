@@ -116,10 +116,8 @@ if __name__ == '__main__':
     f = open(chrootAuthotizedKeyFile, 'r')
     #print f.read()
     oldKeys = AuthorizedKeysFile(f)
-    print "oldKeys", oldKeys, len(oldKeys.keys ), chrootAuthotizedKeyFile
 
     for key in oldKeys.keys:
-        print key.comment, "xx", key, "ww", comment
         if key.comment == comment:
             print "key for user %s already exists"%comment
             print "I cannot add a second key for the same user/machine"
@@ -134,7 +132,7 @@ if __name__ == '__main__':
               'no-port-forwarding,' \
               'no-pty,no-user-rc,no-X11-forwarding ' % projectName
     fullkey = command + newKey.keydata + newKey.comment
-    with open(chrootAuthotizedKeyFile, 'wa') as authorizedFile:
+    with open(chrootAuthotizedKeyFile, 'a') as authorizedFile:
         authorizedFile.write(fullkey)
     # REmemeber
     print "REMEMBER, when done: "
