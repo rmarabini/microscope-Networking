@@ -17,6 +17,12 @@ def _usage(description, epilog):
                  target directory
                  timeout (stop) seconds
     """
+    # Check that the  python script is running under Administrator rights (sudo)
+    if os.getuid() != 0:
+        print "Error: this script must be run with administrator rights (sudo)"
+        print "I quit"
+        exit(1)
+
     # Print directory information
     print "PROJECT NAMES-----------------------------"
     projectDir = '/var/services/homes/scipionuser/Projects/20*'
