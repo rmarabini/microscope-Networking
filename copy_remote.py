@@ -104,11 +104,8 @@ if __name__ == '__main__':
     # read chrooted authorized_keys file
     chrootAuthotizedKeyFile = os.path.join(REMOTESCIPIONUSERPATH,
                                            ".ssh/authorized_keys")
-    print "chrootAuthotizedKeyFile", chrootAuthotizedKeyFile
-    with open(chrootAuthotizedKeyFile, 'r') as authorizedFile:
-        scipionUserKeys = authorizedFile.read()
-    print "scipionUserKeys", scipionUserKeys
-    oldKeys = AuthorizedKeysFile(scipionUserKeys)
+    f = open(chrootAuthotizedKeyFile, 'r')
+    oldKeys = AuthorizedKeysFile(f)
 
     for key in oldKeys.keys:
         if key.comment == comment:
@@ -116,7 +113,7 @@ if __name__ == '__main__':
             print "I cannot add a second key for the same user/machine"
             print "You may edit  file %s and delete the old entry" % os.path.join(REMOTESCIPIONUSERPATH,
                                         'authorized_keys')
-            break
+            exit(1)
 
     # add new key
     command = 'command="/usr/local/bin/rrsync -ro ' \
