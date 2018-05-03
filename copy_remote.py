@@ -118,7 +118,7 @@ if __name__ == '__main__':
     oldKeys = AuthorizedKeysFile(f)
 
     for key in oldKeys.keys:
-        print key.comment, comment
+        print key.comment, "xx", key, "ww", comment
         if key.comment == comment:
             print "key for user %s already exists"%comment
             print "I cannot add a second key for the same user/machine"
@@ -136,7 +136,7 @@ if __name__ == '__main__':
     with open(chrootAuthotizedKeyFile, 'wa') as authorizedFile:
         authorizedFile.write(fullkey)
     # REmemeber
-    print "REMEMBE, when done: "
+    print "REMEMBER, when done: "
     print "    unmount shared dir1: umount %s "%target1
     print "    unmount shared dir2: umount %s "%target2
     print "    delete remote user's public key from file " \
