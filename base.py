@@ -2,7 +2,6 @@
 import argparse
 import os, sys
 import paramiko
-import subprocess
 import time
 from interruptingcow import timeout
 import glob
