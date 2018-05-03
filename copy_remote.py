@@ -105,7 +105,7 @@ if __name__ == '__main__':
     chrootAuthotizedKeyFile = os.path.join(REMOTESCIPIONUSERPATH,
                                            ".ssh/authorized_keys")
     print "chrootAuthotizedKeyFile", chrootAuthotizedKeyFile
-    with open(pubKeyFileName, 'r') as authorizedFile:
+    with open(chrootAuthotizedKeyFile, 'r') as authorizedFile:
         scipionUserKeys = authorizedFile.read()
     print "scipionUserKeys", scipionUserKeys
     oldKeys = AuthorizedKeysFile(scipionUserKeys)
@@ -125,7 +125,7 @@ if __name__ == '__main__':
               'no-port-forwarding,' \
               'no-pty,no-user-rc,no-X11-forwarding ' % projectName
     fullkey = command + newKey.keydata + newKey.comment
-    with open(pubKeyFileName, 'wa') as authorizedFile:
+    with open(chrootAuthotizedKeyFile, 'wa') as authorizedFile:
         authorizedFile.write(fullkey)
     # REmemeber
     print "When done: "
