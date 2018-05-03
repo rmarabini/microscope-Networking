@@ -121,8 +121,10 @@ if __name__ == '__main__':
         if key.comment == comment:
             print "key for user %s already exists"%comment
             print "I cannot add a second key for the same user/machine"
-            print "You may edit  file %s and delete the old entry" % os.path.join(REMOTESCIPIONUSERPATH,
-                                        'authorized_keys')
+            print "You may edit  file %s and delete the old entry" % \
+                  os.path.join(REMOTESCIPIONUSERPATH,
+                               '.ssh',
+                                'authorized_keys')
             exit(1)
 
     # add new key
