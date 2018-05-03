@@ -40,7 +40,7 @@ def _usage(description, epilog):
 
 if __name__ == '__main__':
     description = 'Allow project to be accessed from outside'
-    epilog = 'Example: %s 2018_04_16_belen_t7' % __file__
+    epilog = 'Example: %s 2018_04_16_belen_t7 /tmp/idrsa_pub' % __file__
     epilog += "Rememeber to log as administrator and execute script with sudo"
     projectName, pubKeyFileName = _usage(description, epilog)
     chrootedProjectPath = os.path.join(REMOTESCIPIONUSERPATH, projectName)
