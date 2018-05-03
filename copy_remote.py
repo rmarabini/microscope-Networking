@@ -116,6 +116,7 @@ if __name__ == '__main__':
     f = open(chrootAuthotizedKeyFile, 'r')
     print f.read()
     oldKeys = AuthorizedKeysFile(f)
+    print "oldKeys", oldKeys
 
     for key in oldKeys.keys:
         print key.comment, "xx", key, "ww", comment
