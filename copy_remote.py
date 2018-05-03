@@ -10,7 +10,7 @@ from sshpubkeys.exceptions import (InvalidKeyError)
 
 REMOTESCIPIONUSERPATH = \
     '/usr/local/debian-chroot/var/chroottarget/home/scipionuser'
-TIMEOUT = 3
+TIMEOUT = 1
 
 def _usage(description, epilog):
     """ Print usage information and process command line
@@ -116,7 +116,7 @@ if __name__ == '__main__':
     f = open(chrootAuthotizedKeyFile, 'r')
     print f.read()
     oldKeys = AuthorizedKeysFile(f)
-    print "oldKeys", oldKeys
+    print "oldKeys", oldKeys, len(oldKeys.keys )
 
     for key in oldKeys.keys:
         print key.comment, "xx", key, "ww", comment
