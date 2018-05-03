@@ -106,7 +106,7 @@ if __name__ == '__main__':
                                            ".ssh/authorized_keys")
     print "chrootAuthotizedKeyFile", chrootAuthotizedKeyFile
     with open(chrootAuthotizedKeyFile, 'r') as authorizedFile:
-        scipionUserKeys = authorizedFile.read()
+        scipionUserKeys = chrootAuthotizedKeyFile.read()
     print "scipionUserKeys", scipionUserKeys
     oldKeys = AuthorizedKeysFile(scipionUserKeys)
 
