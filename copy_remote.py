@@ -2,9 +2,11 @@
 import argparse
 import os, sys
 import glob
+import time
 from argparse import RawTextHelpFormatter
 from base import DATADIR, EPUDATADIR, PROJECTDIR
 from sshpubkeys import SSHKey, AuthorizedKeysFile
+from sshpubkeys.exceptions import (InvalidKeyError)
 
 REMOTESCIPIONUSERPATH = \
     '/usr/local/debian-chroot/var/chroottarget/home/scipionuser'
@@ -32,22 +34,35 @@ def _usage(description, epilog):
 if __name__ == '__main__':
     description = 'Allow project to be accessed from outside'
     epilog = 'Example: %s 2018_04_16_belen_t7' % __file__
-    epilog += "Rememebr to log as administrator and execute script with sudo"
+    epilog += "Rememeber to log as administrator and execute script with sudo"
     projectName, pubKeyFileName = _usage(description, epilog)
     chrootedProjectPath = os.path.join(REMOTESCIPIONUSERPATH, projectName)
 
     # create main directory
-    os.system("mkdir %s" % chrootedProjectPath)
-    os.system("chown scipionuser %s" % chrootedProjectPath)
+    if os.path.exists(chrootedProjectPath):
+        print "WARNING: Directory %s already exists." % \
+              chrootedProjectPath
+        time.sleep(5)
+    else:
+        os.system("mkdir %s" % chrootedProjectPath)
+        os.system("chown scipionuser %s" % chrootedProjectPath)
 
     # create offloaddata and project directories
     dir = os.path.join(chrootedProjectPath, EPUDATADIR[:-1])
-    os.system("mkdir %s" % dir)
-    os.system("chown scipionuser %s" % dir)
+    if os.path.exists(dir):
+        print "WARNING: Directory %s already exists."% dir
+        time.sleep(5)
+    else:
+        os.system("mkdir %s" % dir)
+        os.system("chown scipionuser %s" % dir)
     #
     dir = os.path.join(chrootedProjectPath, PROJECTDIR[:-1])
-    os.system("mkdir %s" % dir)
-    os.system("chown scipionuser %s" % dir)
+    if os.path.exists(dir):
+        print "WARNING: Directory %s already exists."% dir
+        time.sleep(5)
+    else:
+        os.system("mkdir %s" % dir)
+        os.system("chown scipionuser %s" % dir)
 
     # mount data and project
     mountCommand = "mount -o bind"
@@ -59,6 +74,7 @@ if __name__ == '__main__':
         os.system("%s %s %s" %(remountCommand, source1, target1)) # remount read only
     else:
         print "WARNING: %s directory is already mounted" % target1
+        time.sleep(5)
     #
     source2 = os.path.join(DATADIR, PROJECTDIR, projectName)
     target2 = os.path.join(chrootedProjectPath, PROJECTDIR[:-1])
@@ -67,12 +83,21 @@ if __name__ == '__main__':
         os.system("%s %s %s" %(remountCommand, source2, target2)) # remount read only
     else:
         print "WARNING: %s directory is already mounted" % target2
+        time.sleep(5)
 
     # read local public key file
     with open(pubKeyFileName, 'r') as keyFile:
         newKeyString = keyFile.read()
     newKey = SSHKey(newKeyString)
-    newKey.parse()
+    try:
+        newKey.parse()
+    except InvalidKeyError as err:
+        print("Invalid key:", err)
+        sys.exit(1)
+    except NotImplementedError as err:
+        print("Invalid key type:", err)
+        sys.exit(1)
+
     comment = newKey.comment # key owner 'roberto@flemming'
     print "Adding %s key" % comment
 
