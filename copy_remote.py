@@ -4,6 +4,7 @@ import os, sys
 import glob
 from argparse import RawTextHelpFormatter
 from base import DATADIR, EPUDATADIR, PROJECTDIR
+from sshpubkeys import SSHKey, AuthorizedKeysFile
 
 REMOTESCIPIONUSERPATH = \
     '/usr/local/debian-chroot/var/chroottarget/home/scipionuser'
@@ -24,14 +25,15 @@ def _usage(description, epilog):
                                      formatter_class=RawTextHelpFormatter,
                                      epilog=epilog)
     parser.add_argument("projname", help="source directory")
+    parser.add_argument("keyfile", help='file with public key')
     args = parser.parse_args()
-    return args.projname
+    return args.projname, args.keyfile
 
 if __name__ == '__main__':
     description = 'Allow project to be accessed from outside'
     epilog = 'Example: %s 2018_04_16_belen_t7' % __file__
     epilog += "Rememebr to log as administrator and execute script with sudo"
-    projectName = _usage(description, epilog)
+    projectName, pubKeyFileName = _usage(description, epilog)
     chrootedProjectPath = os.path.join(REMOTESCIPIONUSERPATH, projectName)
 
     # create main directory
@@ -50,19 +52,65 @@ if __name__ == '__main__':
     # mount data and project
     mountCommand = "mount -o bind"
     remountCommand = "mount -o remount,ro,bind"
-    source = os.path.join(DATADIR, EPUDATADIR, projectName)
-    target = os.path.join(chrootedProjectPath, EPUDATADIR[:-1])
-    os.system("%s %s %s" %(mountCommand, source, target))
-    os.system("%s %s %s" %(remountCommand, source, target)) # remount read only
+    source1 = os.path.join(DATADIR, EPUDATADIR, projectName)
+    target1 = os.path.join(chrootedProjectPath, EPUDATADIR[:-1])
+    if os.path.ismount(targetº):
+        os.system("%s %s %s" %(mountCommand, source1, target1))
+        os.system("%s %s %s" %(remountCommand, source1, target1)) # remount read only
+    else:
+        print "WARNING: %s directory is already mounted" % target1
     #
-    source = os.path.join(DATADIR, PROJECTDIR, projectName)
-    target = os.path.join(chrootedProjectPath, PROJECTDIR[:-1])
-    os.system("%s %s %s" %(mountCommand, source, target))
-    os.system("%s %s %s" %(remountCommand, source, target)) # remount read only
+    source2 = os.path.join(DATADIR, PROJECTDIR, projectName)
+    target2 = os.path.join(chrootedProjectPath, PROJECTDIR[:-1])
+    if os.path.ismount(target2):
+        os.system("%s %s %s" %(mountCommand, source2, target2))
+        os.system("%s %s %s" %(remountCommand, source2, target2)) # remount read only
+    else:
+        print "WARNING: %s directory is already mounted" % target2
 
+    # read local public key file
+    with open(pubKeyFileName, 'r') as keyFile:
+        newKeyString = keyFile.read()
+    newKey = SSHKey(newKeyString)
+    newKey.parse()
+    comment = newKey.comment # key owner 'roberto@flemming'
+    print "Adding %s key" % comment
+
+    # read chrooted authorized_keys file
+    chrootAuthotizedKeyFile = os.path.join(REMOTESCIPIONUSERPATH, ".ssh/authorized_keys")
+    with open(pubKeyFileName, 'r') as authorizedFile:
+        scipionUserKeys = authorizedFile.read()
+    oldKeys = AuthorizedKeysFile(scipionUserKeys)
+
+    for key in oldKeys.keys:
+        if key.comment == comment:
+            print "key for user %s already exists"%comment
+            print "I cannot add a second key for the same user/machine"
+            print "You may edit  file %s and delete the old entry" % os.path.join(REMOTESCIPIONUSERPATH,
+                                        'authorized_keys')
+            break
+
+    # add new key
+    command = 'command="/usr/local/bin/rrsync -ro ' \
+              '/home/scipionuser/%s",' \
+              'no-agent-forwarding,' \
+              'no-port-forwarding,' \
+              'no-pty,no-user-rc,no-X11-forwarding ' % projectName
+    fullkey = command + newKey.keydata + newKey.comment
+    with open(pubKeyFileName, 'wa') as authorizedFile:
+        authorizedFile.write(fullkey)
     # REmemeber
-    print "paste remote user's public key into file %s/.ssh/authorized_keys" % \
+    print "When done: "
+    print "    unmount shared dir1: umount %s "%target1
+    print "    unmount shared dir2: umount %s "%target2
+    print "    delete remote user's public key from file " \
+          "%s/.ssh/authorized_keys" % \
           REMOTESCIPIONUSERPATH
-    print "delete form file old keys"
-    print "unmount old shares: umount %s/20XXX/YYYY "% REMOTESCIPIONUSERPATH
-    print ("Done")
+    print "IMPORTANT: remote user should execute command: "
+    print '    rsync --progress -av -e "ssh -p 2222" ' \
+          'scipionuser@ruska.cnb.csic.es:. %s' % projectName
+
+"""
+rsync --progress -av -e "ssh -p 2222" scipionuser@ruska.cnb.csic.es:. myname
+command="/usr/local/bin/rrsync -ro /home/scipionuser/2018_04_16_ana_t7",no-agent-forwarding,no-port-forwarding,no-pty,no-user-rc,no-X11-forwarding ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC6Lme+PgvG7lHjVuqkeCFnixG8JPp73t/0pU/ckuMiD+ZlNKVgN7ES0wzbu+ZAuiQ9NVpvwycYfeg7Ab6rh2uryUUyFyh1UJgklF85d2baGGOyQNTxHamRUvBl2sBtCwNrBHgu9YV/2o+smM9ZC5XoixSjHlKaF4vatS/GfzM7z7ss249jvd2iOhKVfDQTKgHigBlZs96O7c1kIqrd7Ol9b+B2y/Avvt/eL7X63aSy2hjJ/v0W87/9/4EqC8nGzy1pN1mhcfHhuoVhrtMcayun87xiV1IJr5zVCosYZYPNCGPmyeUXt17XAOvaDGDBU0jROBn13SKUlbC4YIK8S5q9 roberto@flemming
+"""
