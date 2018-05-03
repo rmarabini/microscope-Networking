@@ -10,6 +10,7 @@ from sshpubkeys.exceptions import (InvalidKeyError)
 
 REMOTESCIPIONUSERPATH = \
     '/usr/local/debian-chroot/var/chroottarget/home/scipionuser'
+TIMEOUT = 3
 
 def _usage(description, epilog):
     """ Print usage information and process command line
@@ -48,7 +49,7 @@ if __name__ == '__main__':
     if os.path.exists(chrootedProjectPath):
         print "WARNING: Directory %s already exists." % \
               chrootedProjectPath
-        time.sleep(5)
+        time.sleep(TIMEOUT)
     else:
         os.system("mkdir %s" % chrootedProjectPath)
         os.system("chown scipionuser %s" % chrootedProjectPath)
@@ -57,7 +58,7 @@ if __name__ == '__main__':
     dir = os.path.join(chrootedProjectPath, EPUDATADIR[:-1])
     if os.path.exists(dir):
         print "WARNING: Directory %s already exists."% dir
-        time.sleep(5)
+        time.sleep(TIMEOUT)
     else:
         os.system("mkdir %s" % dir)
         os.system("chown scipionuser %s" % dir)
@@ -65,7 +66,7 @@ if __name__ == '__main__':
     dir = os.path.join(chrootedProjectPath, PROJECTDIR[:-1])
     if os.path.exists(dir):
         print "WARNING: Directory %s already exists."% dir
-        time.sleep(5)
+        time.sleep(TIMEOUT)
     else:
         os.system("mkdir %s" % dir)
         os.system("chown scipionuser %s" % dir)
@@ -76,20 +77,22 @@ if __name__ == '__main__':
     source1 = os.path.join(DATADIR, EPUDATADIR, projectName)
     target1 = os.path.join(chrootedProjectPath, EPUDATADIR[:-1])
     if os.path.ismount(target1):
+        os.system("%s %s %s" %(remountCommand, source1, target1)) # remount read only
+        print "WARNING: %s directory is already mounted" % target1
+        time.sleep(TIMEOUT)
+    else:
         os.system("%s %s %s" %(mountCommand, source1, target1))
         os.system("%s %s %s" %(remountCommand, source1, target1)) # remount read only
-    else:
-        print "WARNING: %s directory is already mounted" % target1
-        time.sleep(5)
     #
     source2 = os.path.join(DATADIR, PROJECTDIR, projectName)
     target2 = os.path.join(chrootedProjectPath, PROJECTDIR[:-1])
     if os.path.ismount(target2):
+        os.system("%s %s %s" %(remountCommand, source2, target2)) # remount read only
+        print "WARNING: %s directory is already mounted" % target2
+        time.sleep(TIMEOUT)
+    else:
         os.system("%s %s %s" %(mountCommand, source2, target2))
         os.system("%s %s %s" %(remountCommand, source2, target2)) # remount read only
-    else:
-        print "WARNING: %s directory is already mounted" % target2
-        time.sleep(5)
 
     # read local public key file
     with open(pubKeyFileName, 'r') as keyFile:
@@ -111,9 +114,11 @@ if __name__ == '__main__':
     chrootAuthotizedKeyFile = os.path.join(REMOTESCIPIONUSERPATH,
                                            ".ssh/authorized_keys")
     f = open(chrootAuthotizedKeyFile, 'r')
+    print f.read()
     oldKeys = AuthorizedKeysFile(f)
 
     for key in oldKeys.keys:
+        print key.comment, comment
         if key.comment == comment:
             print "key for user %s already exists"%comment
             print "I cannot add a second key for the same user/machine"
@@ -131,7 +136,7 @@ if __name__ == '__main__':
     with open(chrootAuthotizedKeyFile, 'wa') as authorizedFile:
         authorizedFile.write(fullkey)
     # REmemeber
-    print "When done: "
+    print "REMEMBE, when done: "
     print "    unmount shared dir1: umount %s "%target1
     print "    unmount shared dir2: umount %s "%target2
     print "    delete remote user's public key from file " \
