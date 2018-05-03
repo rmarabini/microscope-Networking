@@ -102,7 +102,9 @@ if __name__ == '__main__':
     print "Adding %s key" % comment
 
     # read chrooted authorized_keys file
-    chrootAuthotizedKeyFile = os.path.join(REMOTESCIPIONUSERPATH, ".ssh/authorized_keys")
+    chrootAuthotizedKeyFile = os.path.join(REMOTESCIPIONUSERPATH,
+                                           ".ssh/authorized_keys")
+    print "chrootAuthotizedKeyFile", chrootAuthotizedKeyFile
     with open(pubKeyFileName, 'r') as authorizedFile:
         scipionUserKeys = authorizedFile.read()
     print "scipionUserKeys", scipionUserKeys
