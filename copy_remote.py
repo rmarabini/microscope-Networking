@@ -131,11 +131,11 @@ if __name__ == '__main__':
               'no-agent-forwarding,' \
               'no-port-forwarding,' \
               'no-pty,no-user-rc,no-X11-forwarding ' % projectName
-    fullkey = command + newKey.keydata + newKey.comment
+    fullkey = command + newKey.keydata # + newKey.comment
     with open(chrootAuthotizedKeyFile, 'a') as authorizedFile:
         authorizedFile.write(fullkey)
     # REmemeber
-    print "REMEMBER, when done: "
+    print "\n\n\n\nREMEMBER, when done: "
     print "    unmount shared dir1: umount %s "%target1
     print "    unmount shared dir2: umount %s "%target2
     print "    delete remote user's public key from file " \
