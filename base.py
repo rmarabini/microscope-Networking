@@ -16,6 +16,7 @@ SCIPIONHOST = 'scipionbox'
 RUSKAHOST = 'ruska'
 SCIPIONUSER = 'scipionuser'
 SCIPIONDATADIR = '/home/%s/ScipionUserData' % SCIPIONUSER
+LOGS='Logs'
 
 
 def _usage(description, epilog):
@@ -135,6 +136,7 @@ class CopyFiles():
             cmdEPU = RSYNC + \
                   " -va" + \
                   " --progress " + \
+                  " --log-file=%s " % os.path.join(DATADIR,LOGS,self.projectName)  + \
                   os.path.join(DATADIR, typeData, self.projectName + "/ ")
             targetDir = os.path.join(self.targetDir, self.projectName, typeData)
             if self.localTarget:
@@ -148,6 +150,7 @@ class CopyFiles():
             cmdProj = RSYNC + \
                   " -va" + \
                   " --progress " + \
+                  " --log-file=%s " % os.path.join(DATADIR,LOGS,self.projectName)  + \
                   os.path.join(DATADIR, typeData, self.projectName + "/ ")
             targetDir = os.path.join(self.targetDir, self.projectName, typeData)
             if self.localTarget:
