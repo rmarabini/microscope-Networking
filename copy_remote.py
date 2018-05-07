@@ -114,7 +114,6 @@ if __name__ == '__main__':
     chrootAuthotizedKeyFile = os.path.join(REMOTESCIPIONUSERPATH,
                                            ".ssh/authorized_keys")
     f = open(chrootAuthotizedKeyFile, 'r')
-    #print f.read()
     oldKeys = AuthorizedKeysFile(f)
 
     for key in oldKeys.keys:
