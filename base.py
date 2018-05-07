@@ -17,7 +17,7 @@ RUSKAHOST = 'ruska'
 SCIPIONUSER = 'scipionuser'
 SCIPIONDATADIR = '/home/%s/ScipionUserData' % SCIPIONUSER
 LOGS='Logs'
-
+SLEEPTIME=3600 # seconds
 
 def _usage(description, epilog):
     """ Print usage information and process command line
@@ -182,7 +182,7 @@ class CopyFiles():
                         os.system(cmdProj)
                         #self.remoteCommand.run_cmd(SCIPIONHOST, [cmdProj])
                     print "sleeping";sys.stdout.flush()
-                    time.sleep(900)
+                    time.sleep(SLEEPTIME)
                     print "weaking up";sys.stdout.flush()
 
         except RuntimeError:
