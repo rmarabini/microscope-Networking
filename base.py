@@ -150,6 +150,7 @@ class CopyFiles():
             cmdProj = RSYNC + \
                   " -va" + \
                   " --progress " + \
+                  ' --exclude="*Fractions.mrc" ' + \
                   " --log-file=%s " % os.path.join(DATADIR,LOGS,self.projectName)  + \
                   os.path.join(DATADIR, typeData, self.projectName + "/ ")
             targetDir = os.path.join(self.targetDir, self.projectName, typeData)
