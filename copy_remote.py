@@ -114,7 +114,6 @@ if __name__ == '__main__':
     chrootAuthotizedKeyFile = os.path.join(REMOTESCIPIONUSERPATH,
                                            ".ssh/authorized_keys")
     f = open(chrootAuthotizedKeyFile, 'r')
-    #print f.read()
     oldKeys = AuthorizedKeysFile(f)
 
     for key in oldKeys.keys:
@@ -143,6 +142,7 @@ if __name__ == '__main__':
     print "    delete remote user's public key from file " \
           "%s/.ssh/authorized_keys" % \
           REMOTESCIPIONUSERPATH
+<<<<<<< HEAD
     print "IMPORTANT: remote user should save in a file and execute" \
           " the following python code:\n\n\n "
     print """
