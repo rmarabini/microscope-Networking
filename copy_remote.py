@@ -143,6 +143,22 @@ if __name__ == '__main__':
     print "    delete remote user's public key from file " \
           "%s/.ssh/authorized_keys" % \
           REMOTESCIPIONUSERPATH
-    print "IMPORTANT: remote user should execute command: "
-    print '    rsync --progress -av -e "ssh -p 2222" ' \
-          'scipionuser@ruska.cnb.csic.es:. %s' % projectName
+    print "IMPORTANT: remote user should save in a file and execute" \
+          " the following python code:\n\n\n "
+    print """
+#!/usr/bin/env python
+import time
+import os
+
+timeout = 60 * 60 * 24 * 5  # retry for 5 days
+sleep_time = 60 * 30 # retry each 30 minutes
+timeout_start = time.time() # time at which the script was started
+command = 'rsync --progress -rlv -e "ssh -p 2222" '
+                  'scipionuser@ruska.cnb.csic.es:. %s'
+
+while time.time() < timeout_start + timeout:
+    os.system(command)
+    time.sleep(sleep_time)
+
+
+"""%projectName
