@@ -134,7 +134,7 @@ class CopyFiles():
             typeData = EPUDATADIR
             self._createDirectory(typeData)
             cmdEPU = RSYNC + \
-                  " -va" + \
+                  " -vrl" + \
                   " --progress " + \
                   " --log-file=%s " % os.path.join(DATADIR,LOGS,self.projectName)  + \
                   os.path.join(DATADIR, typeData, self.projectName + "/ ")
@@ -148,7 +148,7 @@ class CopyFiles():
             typeData = PROJECTDIR
             self._createDirectory(typeData)
             cmdProj = RSYNC + \
-                  " -va" + \
+                  " -vrl" + \
                   " --progress --delete " + \
                   ' --exclude="*Fractions.mrc" ' + \
                   " --log-file=%s " % os.path.join(DATADIR,LOGS,self.projectName)  + \
@@ -158,19 +158,6 @@ class CopyFiles():
                 cmdProj += targetDir
             else:
                 cmdProj += "%s@%s:%s" % (self.targetUserName, self.targetHost, targetDir)
-            """
-            typeData = PROJECTDIR
-            self._createDirectory(typeData)
-            cmdProj = RSYNC + \
-                  " -va" + \
-                  " --progress" + \
-                  " " + SCIPIONDATADIR + "/projects/" + self.projectName + "/ "
-            targetDir = os.path.join(self.targetDir, self.projectName, typeData)
-            if self.localTarget:
-                cmdProj += "%s@%s:%s" % (SCIPIONUSER, RUSKAHOST, targetDir)
-            else:
-                cmdProj += "%s@%s:%s" % (self.targetUserName, self.targetHost, targetDir)
-            """
 
         try:
             with timeout(_timeout, exception=RuntimeError): # _timeout seconds
