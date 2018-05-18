@@ -149,7 +149,7 @@ class CopyFiles():
             self._createDirectory(typeData)
             cmdProj = RSYNC + \
                   " -va" + \
-                  " --progress " + \
+                  " --progress --delete " + \
                   ' --exclude="*Fractions.mrc" ' + \
                   " --log-file=%s " % os.path.join(DATADIR,LOGS,self.projectName)  + \
                   os.path.join(DATADIR, typeData, self.projectName + "/ ")
