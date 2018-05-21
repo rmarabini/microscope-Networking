@@ -134,7 +134,7 @@ class CopyFiles():
             typeData = EPUDATADIR
             self._createDirectory(typeData)
             cmdEPU = RSYNC + \
-                  " -vrl" + \
+                  " -vrlt" + \
                   " --progress " + \
                   " --log-file=%s " % os.path.join(DATADIR,LOGS,self.projectName)  + \
                   os.path.join(DATADIR, typeData, self.projectName + "/ ")
@@ -148,7 +148,7 @@ class CopyFiles():
             typeData = PROJECTDIR
             self._createDirectory(typeData)
             cmdProj = RSYNC + \
-                  " -vrl" + \
+                  " -vrlt" + \
                   " --progress --delete " + \
                   ' --exclude="*Fractions.mrc" ' + \
                   " --log-file=%s " % os.path.join(DATADIR,LOGS,self.projectName)  + \
