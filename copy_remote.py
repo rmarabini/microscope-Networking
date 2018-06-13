@@ -27,7 +27,7 @@ def _usage(description, epilog):
     # Print directory information
     print "PROJECT NAMES-----------------------------"
     projectDir = '/var/services/homes/scipionuser/Projects/20*'
-    for name in glob.glob(projectDir):
+    for name in sorted(glob.glob(projectDir)):
         print "  ", os.path.basename(name)
 
     parser = argparse.ArgumentParser(description=description,
