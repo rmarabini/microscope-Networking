@@ -135,14 +135,13 @@ if __name__ == '__main__':
     fullkey = command + newKey.keydata # + newKey.comment
     with open(chrootAuthotizedKeyFile, 'a') as authorizedFile:
         authorizedFile.write(fullkey)
-    # REmemeber
+    # Rememeber
     print "\n\n\n\nREMEMBER, when done: "
     print "    unmount shared dir1: umount %s "%target1
     print "    unmount shared dir2: umount %s "%target2
     print "    delete remote user's public key from file " \
           "%s/.ssh/authorized_keys" % \
           REMOTESCIPIONUSERPATH
-<<<<<<< HEAD
     print "IMPORTANT: remote user should save in a file and execute" \
           " the following python code:\n\n\n "
     print """
@@ -153,7 +152,7 @@ import os
 timeout = 60 * 60 * 24 * 5  # retry for 5 days
 sleep_time = 60 * 30 # retry each 30 minutes
 timeout_start = time.time() # time at which the script was started
-command = 'rsync --progress -rlv -e "ssh -p 2222" '
+command = 'rsync --progress -rlvt -e "ssh -p 2222" '
                   'scipionuser@ruska.cnb.csic.es:. %s'
 
 while time.time() < timeout_start + timeout:
