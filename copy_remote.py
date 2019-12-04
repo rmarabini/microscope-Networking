@@ -135,7 +135,7 @@ if __name__ == '__main__':
     fullkey = command + newKey.keydata # + newKey.comment
     with open(chrootAuthotizedKeyFile, 'a') as authorizedFile:
         authorizedFile.write(fullkey)
-    # Rememeber
+    # REmemeber
     print "\n\n\n\nREMEMBER, when done: "
     print "    unmount shared dir1: umount %s "%target1
     print "    unmount shared dir2: umount %s "%target2
@@ -152,12 +152,16 @@ import os
 timeout = 60 * 60 * 24 * 5  # retry for 5 days
 sleep_time = 60 * 30 # retry each 30 minutes
 timeout_start = time.time() # time at which the script was started
-command = 'rsync --progress -rlvt -e "ssh -p 2222" '
-                  'scipionuser@ruska.cnb.csic.es:. %s'
+command = 'rsync --progress -rlvt -e "ssh -p 2222" scipionuser@ruska.cnb.csic.es:. %s'
 
 while time.time() < timeout_start + timeout:
     os.system(command)
     time.sleep(sleep_time)
 
+# NOTE: If you only need to copy the data or the project  modify the above rsync command
+# by adding "--exclude OffloadData" if you only want to copy the Project or
+# "--exclude Project" if you only want to copy the data
+# For example:
+#     rsync --progress -rlvt -e "ssh -p 2222" scipionuser@ruska.cnb.csic.es:. --exclude OffloadData localPath 
 
 """%projectName
