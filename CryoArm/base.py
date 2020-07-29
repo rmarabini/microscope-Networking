@@ -36,7 +36,7 @@ def _usage(description, epilog):
     """
     # Print directory information
     print("PROJECT NAMES------------------------------")
-    projectDir = '/home/scipionuser/OffloadData/20*'
+    projectDir = '/home/scipionuser/%s/20*' % EPUDATADIR
     for name in sorted(glob.glob(projectDir)):
         print("  ", os.path.basename(name))
     print("------------------------")
