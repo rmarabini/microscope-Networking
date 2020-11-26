@@ -9,7 +9,7 @@ from argparse import RawTextHelpFormatter
 import select
 import fnmatch
 
-DATADIR = 'scipionuser@hilbert-dos.cnb.csic.es:/mnt/micro/home/scipionuser/'
+DATADIR = 'scipionuser@hilbert-dos.cnb.csic.es:/home/scipionuser/'
 EPUDATADIR = 'OffloadData/'
 PROJECTDIR = 'ScipionUserData/projects/'
 RSYNC = '/usr/bin/rsync'
